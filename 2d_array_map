@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+<div class="array-viewer"></div>
+<label for="mapWidth" > Width(Column):
+	<input type="number" name="mapWidth" size="3" id="mapWidth">
+</label>
+<label for="mapHeight" > Height(Row):
+	<input type="number" name="mapHeight" size="3" id="mapHeight">
+</label>
+<input type="submit" name="createMap" value="createMap" id="createMap">
+
+<script type="text/javascript">
+	var MapViewer = function(row,column){
+		var h = row;
+		var w = columns;
+		this.arr = Array(h);//height
+		//width
+	    for (var i = 0; i < h; i++) {
+	      this.arr[i] = new Array(w);
+	      this.fill(this.arr[i], 0);
+	    }
+	    //this.showArray(this.arr);
+	};
+	
+	MapViewer.prototype.getArray = function(){
+		return arr;
+	};
+	
+	MapViewer.prototype.fillAll = function (value) {
+  		for (var i = 0; i < this.arr.length; i++) {
+    		this.arr[i] = value;
+  		}
+  	};
+
+  	MapViewer.prototype.fillPos = function (x, y, val) {
+  		this.arr[x][y] = val;
+  	};
+
+  	MapViewer.prototype.showArray = function (arr) {
+  		var body = document.getElementsByTagName("body")[0];
+  		for (var i = 0; i < arr.length; i++) {
+  			for (var j = 0; j < arr[i].length; j++) {
+  				var el = 'input';
+  				el.type = "text";
+  				var elem = document.createElement(el);
+				elem.id = el + i + "-" + j;
+				
+				elem.size = 2;
+				elem.height = 2;
+  				elem.value = arr[i][j];
+  				body.appendChild(elem);
+  			}
+  			body.appendChild(document.createElement('br'));
+  		}
+  	};
+
+  	MapViewer.prototype.saveArray = function (arr) {
+  		var body = document.getElementsByTagName("body")[0];
+  		for (var i = 0; i < arr.length; i++) {
+  			for (var j = 0; j < arr[i].length; j++) {
+  				var el = 'input';
+  				var elementId = el + i + "-" + j; 
+  				var elem = document.getElementById(elementId);
+  				arr[i][j] = elem.value;
+  			}
+  		}
+  	};
+
+  	MapViewer.prototype.fill = function (arr, value) {
+	  for (var i = 0; i < arr.length; i++) {
+	    arr[i] = value;
+	  }
+	};
+
+	//create map
+	var btn = document.getElementById("createMap");
+	btn.addEventListener("click", createMap);
+
+	function createMap(){
+		var w = document.getElementById('mapWidth').value;
+		var h = document.getElementById('mapHeight').value;
+		if (w || h) {}
+
+		var mapA = new MapViewer();
+		btn.removeEventListener("click", createMap);
+	};
+
+
+
+	//el is event = el.target is element
+	MapViewer.prototype.changeColor(event){
+		if (event.target.value == 1) {
+			event.target.style.backgroundColor = 'green';
+		}
+		if (event.target.value == 0) {
+			event.target.style.backgroundColor = 'white';
+		}
+	}
+
+	var inputs = document.getElementsByTagName('input');
+	
+	for (var i = 0; i < inputs.length; i++) {
+		inputs[i].addEventListener("change", changeColor);
+	}
+
+	MapViewer.prototype.writeRows = function(){
+		for (var i = 0; i < this.arr.length; i++) {
+			console.log(this.arr[i]);
+		}
+	};
+
+</script>
+</body>
+</html>
