@@ -2,55 +2,55 @@
 <html>
 <head>
 	<title></title>
+	<style type="text/css">
+		.myBtn {
+			background-color:white;
+			color:black;
+			font-size:10px;
+			text-align: center;
+			width: 20px;
+			height: : 20px;
+			border: 1px solid black;
+		}
+	</style>
 </head>
 <body>
 <div class="array-viewer"></div>
 <label for="mapWidth" > Width(Column):
-	<input type="number" name="mapWidth" size="3" id="mapWidth">
+	<input type="number" name="mapWidth" size="3" id="mapWidth" required>
 </label>
 <label for="mapHeight" > Height(Row):
-	<input type="number" name="mapHeight" size="3" id="mapHeight">
+	<input type="number" name="mapHeight" size="3" id="mapHeight" required>
 </label>
 <input type="submit" name="createMap" value="createMap" id="createMap">
+<br/>
 
 <script type="text/javascript">
-	var MapViewer = function(row,column){
-		var h = row;
-		var w = columns;
-		this.arr = Array(h);//height
+//@TODO fix this, this implements window
+	'use strict';
+	var MapViewer = function(row, column){
+		var that = this;
+		var h = parseInt(row);
+		var w = parseInt(column);
+		that.arr = new Array(h);//height
 		//width
 	    for (var i = 0; i < h; i++) {
-	      this.arr[i] = new Array(w);
-	      this.fill(this.arr[i], 0);
+	      that.arr[i] = new Array(w);
+	      that.fillCol(that.arr[i], 0);
 	    }
-	    //this.showArray(this.arr);
-	};
-	
-	MapViewer.prototype.getArray = function(){
-		return arr;
-	};
-	
-	MapViewer.prototype.fillAll = function (value) {
-  		for (var i = 0; i < this.arr.length; i++) {
-    		this.arr[i] = value;
-  		}
-  	};
+	    this.showArray(this.arr);	
 
-  	MapViewer.prototype.fillPos = function (x, y, val) {
-  		this.arr[x][y] = val;
-  	};
+	};
 
   	MapViewer.prototype.showArray = function (arr) {
   		var body = document.getElementsByTagName("body")[0];
   		for (var i = 0; i < arr.length; i++) {
   			for (var j = 0; j < arr[i].length; j++) {
-  				var el = 'input';
-  				el.type = "text";
-  				var elem = document.createElement(el);
+				/*<a href="#" class="myButton">1</a>*/  						
+  				var el = 'myBtn';
+  				var elem = document.createElement('input');
+  				elem.className = el;
 				elem.id = el + i + "-" + j;
-				
-				elem.size = 2;
-				elem.height = 2;
   				elem.value = arr[i][j];
   				body.appendChild(elem);
   			}
@@ -70,48 +70,58 @@
   		}
   	};
 
-  	MapViewer.prototype.fill = function (arr, value) {
+  	MapViewer.prototype.fillCol = function (arr, value) {
 	  for (var i = 0; i < arr.length; i++) {
 	    arr[i] = value;
 	  }
 	};
-
-	//create map
-	var btn = document.getElementById("createMap");
-	btn.addEventListener("click", createMap);
-
-	function createMap(){
-		var w = document.getElementById('mapWidth').value;
-		var h = document.getElementById('mapHeight').value;
-		if (w || h) {}
-
-		var mapA = new MapViewer();
-		btn.removeEventListener("click", createMap);
-	};
-
-
-
-	//el is event = el.target is element
-	MapViewer.prototype.changeColor(event){
-		if (event.target.value == 1) {
-			event.target.style.backgroundColor = 'green';
-		}
-		if (event.target.value == 0) {
-			event.target.style.backgroundColor = 'white';
-		}
-	}
-
-	var inputs = document.getElementsByTagName('input');
-	
-	for (var i = 0; i < inputs.length; i++) {
-		inputs[i].addEventListener("change", changeColor);
-	}
 
 	MapViewer.prototype.writeRows = function(){
 		for (var i = 0; i < this.arr.length; i++) {
 			console.log(this.arr[i]);
 		}
 	};
+
+	//el is event = el.target is element
+	MapViewer.prototype.changeColor = function(event){
+		if (event.target.value == 1) {
+			event.target.style.backgroundColor = 'green';
+		}
+		if (event.target.value == 0) {
+			event.target.style.backgroundColor = 'white';
+		}
+	};
+	var btn;
+
+	MapViewer.Manage = {
+		createMap: function(){
+			var that = this;
+			var w = document.getElementById('mapWidth').value;
+			var h = document.getElementById('mapHeight').value;
+			if (w.length > 0 || h.length > 0) {
+				var a = new MapViewer(h, w);
+
+				var buttons = document.getElementsByTagName('input');
+
+				//add event to changecolor all input
+				for (var i = 0; i < buttons.length; i++) {
+					buttons[i].addEventListener("change", a.changeColor);
+					//addEventListener("click", displayDate);
+				};
+
+				//remove to not create once again
+				btn.removeEventListener("click", this.createMap);
+			}
+		},
+		init: function(){
+			var that = this;
+			btn = document.getElementById("createMap");
+			btn.addEventListener("click", that.createMap.bind(that));
+		}
+
+	};
+
+	MapViewer.Manage.init();
 
 </script>
 </body>
