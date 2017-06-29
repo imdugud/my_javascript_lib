@@ -47,9 +47,13 @@ UTILS = {
     for (i = 0; i < row; i++) {
       myarray[i] = new Array(column);
     }
+  }, 
+  encodeData(data) {
+    var params = Object.keys(data).map(function (key) {
+      return [key, data[key]].map(encodeURIComponent).join("=");
+    }).join("&");
+    return params + '&key=' + APIKey;
   }
 }
-
-
 
 
