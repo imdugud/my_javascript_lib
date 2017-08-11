@@ -68,7 +68,7 @@ function YoutubeAPI(APIKey, parentElem, modal) {
   }
 
   function setVideoButtons() {
-    getUserVideos('permolittr', 'date', ['snippet'], 30, function (response) {
+    getUserVideos('<username>', 'date', ['snippet'], 30, function (response) {
       if (response.err) {
         return response.data;
       }
